@@ -9,7 +9,7 @@
 #include "headers/mothership.h"
 
 #include "stb_image.h"
-//IMGUI
+// IMGUI
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
@@ -17,17 +17,17 @@
 #include <iostream>
 #include <cmath>
 
-//void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+// void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window, Player *player);
-//void enemyControl(Enemy aliens[][4]);
-//void enemyControl(Enemy aliens[][4]);
+// void enemyControl(Enemy aliens[][4]);
+// void enemyControl(Enemy aliens[][4]);
 void bindBuffers(const float (&vertices)[20], const unsigned int (&indices)[6], unsigned int *VBO, unsigned int *VAO, unsigned int *EBO);
 static void cursorPositionCallback(GLFWwindow *window, double xPos, double yPos);
 static void mouseButtonCallback(GLFWwindow *window, int button, int action, int mods);
 // Tamanho da janela
 const unsigned int WIDTH = 1920;
 const unsigned int HEIGHT = 1080;
-//TEXTURES
+// TEXTURES
 /*
 Texture* ALIEN1_TEXTURE = &Texture("sprites/alien1.png");
 Texture* ALIEN2_TEXTURE = &Texture("sprites/alien2.png");
@@ -36,13 +36,13 @@ Texture* ALIEN4_TEXTURE = &Texture("sprites/alien4.png");
 Texture* ALIEN_BULLET_TEXTURE = &Texture("sprites/alienBullet.png");
 */
 const float VERTEX_DATA[20] = {
-    //COORDINATES          //TEXTURE COORDINATES
+    // COORDINATES          //TEXTURE COORDINATES
     0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
     0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
     -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
     -0.5f, 0.5f, 0.0f, 0.0f, 1.0f};
 const float BACKGROUND_VERTEX_DATA[20] = {
-    //COORDINATES          //TEXTURE COORDINATES
+    // COORDINATES          //TEXTURE COORDINATES
     1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
     1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
     -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
@@ -66,23 +66,33 @@ void resetGlobalVariables()
 }
 int main()
 {
+    // glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
 
     // inicialização e configuração de contexto
     glfwInit();
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+    glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+
     const char *glsl_version = "#version 330";
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    glfwWindowHint(GLFW_MAXIMIZED, GL_TRUE);
-    //glfwWindowHint (GLFW_DECORATED, GL_FALSE);
-    // criação da janela e verificação de erros
+    glfwWindowHint(GLFW_MAXIMIZED, GL_FALSE);
+    glfwWindowHint(GLFW_DECORATED, GL_TRUE);
+    glfwWindowHint(GLFW_ICONIFIED, GL_TRUE);
+    //  criação da janela e verificação de erros
     GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, "Hello triangle", NULL, NULL);
-    GLFWimage images[2];
+
+    /*GLFWimage images[2];
     images[0].pixels = stbi_load("sprites/alien1.png", &images[0].width, &images[0].height, 0, 4);
     images[1].pixels = stbi_load("sprites/alien2.png", &images[1].width, &images[1].height, 0, 4);
+    glfwSetWindowIcon(window, 1, images);*/
+
+    GLFWimage images[1];
+    images[0].pixels = stbi_load("sprites/alien1.png", &images[0].width, &images[0].height, 0, 4); // rgba channels
     glfwSetWindowIcon(window, 1, images);
+    stbi_image_free(images[0].pixels);
+
     glfwSetCursorPosCallback(window, cursorPositionCallback);
     glfwSetMouseButtonCallback(window, mouseButtonCallback);
     if (window == NULL)
@@ -92,7 +102,7 @@ int main()
         return -1;
     }
     glfwMakeContextCurrent(window);
-    //glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    // glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
     // GLAD: Carregamento dos ponteiros de funções para utilizar OpenGL moderno
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -109,18 +119,18 @@ int main()
     ImGuiIO &io = ImGui::GetIO();
     (void)io;
     ImGui::StyleColorsDark();
-    //ImGui::StyleColorsClassic();
-    // Setup Platform/Renderer backends
+    // ImGui::StyleColorsClassic();
+    //  Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
     //-------------------------------------------------
     while (!glfwWindowShouldClose(window))
     {
         resetGlobalVariables();
-        //Shader program used to render squares
+        // Shader program used to render squares
         Shader shaderProgram1("shaders/vertex.glsl", "shaders/fragment.glsl");
         Shader shaderProgram2("shaders/vertex.glsl", "shaders/spaceshipFragment.glsl");
-        //Texture creation
+        // Texture creation
         Texture spaceshipTexture("sprites/spaceship.png");
         Texture spaceshipBulletTexture("sprites/spaceshipLasers.png");
 
@@ -136,7 +146,7 @@ int main()
 
         float initialPosition[2] = {0.0f, -0.7f};
         float enemyInitialPosition[2] = {-0.4f, 0.4f};
-        //Bullet bullet(&shaderProgram1, &spaceshipBulletTexture, initialPosition, 10);
+        // Bullet bullet(&shaderProgram1, &spaceshipBulletTexture, initialPosition, 10);
         Player player(&shaderProgram2, &shaderProgram1, &VAO1, &spaceshipTexture, &spaceshipBulletTexture);
 
         Mothership mothership(&VAO1, 5, 8);
@@ -184,7 +194,7 @@ int main()
                 mothership.Movement(0.65f);
                 mothership.Collision(player.getGun());
                 mothership.BulletLoop();
-                //If enemies enter player zone or player dies
+                // If enemies enter player zone or player dies
                 if (mothership.EnemiesLoose())
                 {
                     win.Draw(&VAO2, 2.0f);
@@ -202,7 +212,7 @@ int main()
                 mothership.Movement(0.65f);
                 mothership.Collision(player.getGun());
                 mothership.BulletLoop();
-                //If enemies enter player zone or player dies
+                // If enemies enter player zone or player dies
                 if (mothership.EnemiesLoose())
                 {
                     win.Draw(&VAO2, 2.0f);
@@ -258,12 +268,12 @@ int main()
 // process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
 void processInput(GLFWwindow *window, Player *player)
 {
-    //CLOSE SCREEN
+    // CLOSE SCREEN
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
     {
         glfwSetWindowShouldClose(window, true);
     }
-    //MOVE PLAYER
+    // MOVE PLAYER
     double xPos, yPos;
     glfwGetCursorPos(window, &xPos, &yPos);
     float normalizedMousePosition[2] = {2 * (float)(xPos) / WIDTH - 1, -0.7f};
@@ -271,7 +281,7 @@ void processInput(GLFWwindow *window, Player *player)
     {
         player->setPosition(normalizedMousePosition);
     }
-    //SHOOT LASERS
+    // SHOOT LASERS
     static int oldStateLeft = GLFW_PRESS;
     int newStateLeft = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
     if (newStateLeft == GLFW_PRESS && oldStateLeft == GLFW_RELEASE && !GAME_PAUSED)
@@ -281,7 +291,7 @@ void processInput(GLFWwindow *window, Player *player)
     }
     oldStateLeft = newStateLeft;
 
-    //PAUSE GAME
+    // PAUSE GAME
     static int oldStateRight = GLFW_PRESS;
     int newStateRight = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT);
     if (newStateRight == GLFW_PRESS && oldStateRight == GLFW_RELEASE)
@@ -299,13 +309,13 @@ void processInput(GLFWwindow *window, Player *player)
     }
 
     oldStateRight = newStateRight;
-    //RESTART GAME
+    // RESTART GAME
     if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
     {
         RESTART_GAME = true;
         std::cout << "restart" << std::endl;
     }
-    //SHOW DATA
+    // SHOW DATA
     static int oldStateMiddle = GLFW_PRESS;
     int newStateMiddle = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE);
     if (newStateMiddle == GLFW_PRESS && oldStateMiddle == GLFW_RELEASE)
@@ -329,14 +339,14 @@ void mouseButtonCallback(GLFWwindow *window, int button, int action, int mods) {
 
 void bindBuffers(const float (&vertices)[20], const unsigned int (&indices)[6], unsigned int *VBO, unsigned int *VAO, unsigned int *EBO)
 {
-    //Vertices information
+    // Vertices information
 
-    //Generate VAO, VBO and EBO
+    // Generate VAO, VBO and EBO
     glGenVertexArrays(1, VAO);
     glGenBuffers(1, VBO);
     glGenBuffers(1, EBO);
 
-    //Bind buffers
+    // Bind buffers
     glBindVertexArray(*VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, *VBO);
@@ -345,10 +355,10 @@ void bindBuffers(const float (&vertices)[20], const unsigned int (&indices)[6], 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-    //Position attribute
+    // Position attribute
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
-    //Texture coordinates attribute
+    // Texture coordinates attribute
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(3 * sizeof(float)));
     glEnableVertexAttribArray(2);
 
