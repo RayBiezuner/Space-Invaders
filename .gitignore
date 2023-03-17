@@ -1,0 +1,6 @@
+*.zip
+*.mp4
+*.pptx
+.vscode/
+.VSCodeCounter/
+demo
