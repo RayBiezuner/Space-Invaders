@@ -1,8 +1,9 @@
 #Files that will be compiled
-IMGUI_DIR = imgui
-OBJS = stb.cpp shader.cpp texture.cpp bullet.cpp enemy.cpp gun.cpp square.cpp mothership.cpp player.cpp main.cpp glad.c
-OBJS += $(IMGUI_DIR)/imgui.cpp $(IMGUI_DIR)/imgui_draw.cpp $(IMGUI_DIR)/imgui_tables.cpp $(IMGUI_DIR)/imgui_widgets.cpp
-OBJS += $(IMGUI_DIR)/imgui_impl_glfw.cpp $(IMGUI_DIR)/imgui_impl_opengl3.cpp
+SRC_DIR = game/src
+OBJS = $(SRC_DIR)/stb.cpp $(SRC_DIR)/shader.cpp $(SRC_DIR)/texture.cpp $(SRC_DIR)/bullet.cpp $(SRC_DIR)/enemy.cpp $(SRC_DIR)/gun.cpp $(SRC_DIR)/square.cpp $(SRC_DIR)/mothership.cpp $(SRC_DIR)/player.cpp $(SRC_DIR)/main.cpp $(SRC_DIR)/glad.c
+
+#OBJS += $(IMGUI_DIR)/imgui.cpp $(IMGUI_DIR)/imgui_draw.cpp $(IMGUI_DIR)/imgui_tables.cpp $(IMGUI_DIR)/imgui_widgets.cpp
+#OBJS += $(IMGUI_DIR)/imgui_impl_glfw.cpp $(IMGUI_DIR)/imgui_impl_opengl3.cpp
 #Used compiler
 CC = g++
 

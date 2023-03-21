@@ -1,6 +1,11 @@
 *.zip
 *.mp4
 *.pptx
+*.ini
 .vscode/
 .VSCodeCounter/
+.build-dir/
+.imgui/
 demo
+CMakeLists.txt
+test.cpp
